@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: rentigo_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - rentigo_net
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: rentigo_server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://root:password@mongo:27017/rentigo?authSource=admin
+    depends_on:
+      - mongo
+    networks:
+      - rentigo_net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: rentigo_client
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - rentigo_net
+
+networks:
+  rentigo_net:
+    driver: bridge
+
+volumes:
+  mongo_data:

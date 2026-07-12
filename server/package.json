@@ -1,0 +1,18 @@
+{
+  "name": "rentigo-server",
+  "version": "1.0.0",
+  "description": "RentiGo Vehicle Rental Management System — Backend API",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "lint": "eslint src/**/*.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["vehicle", "rental", "management", "api"],
+  "author": "RentiGo",
+  "license": "MIT"
+}
